@@ -1,3 +1,20 @@
+import sys
+import subprocess
+
+
+def install_if_missing(package):
+    # Install package if not found
+    try:
+        __import__(package)
+    except ImportError:
+        print(f"\n{package} not found. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package, "--quiet"])
+        print(f"{package} installed successfully!\n")
+
+required_packages = ['nfl_data_py', 'pandas']
+for package in required_packages:
+    install_if_missing(package)
+
 import nfl_data_py as nfl
 import pandas as pd
 
