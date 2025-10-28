@@ -17,8 +17,8 @@ def format_name_pbp_passer(qb_name):
     if len(parts) < 2:
         return None # Invalid input given
     
-    first_initial = parts[0][0]
-    last_name = parts[-1]
+    first_initial = parts[0][0].upper()
+    last_name = parts[-1].title()
 
     return f"{first_initial}.{last_name}"
 
@@ -77,13 +77,13 @@ def get_qb_stats(qb_name, pbp_data):
     ]
 
     if ngs_qb.empty:
-        print(f"{qb_name} is not a valid player.")
+        print(f"{qb_name} is not a valid player.(ngs)")
         return -1
 
     seasonal_qb = seasonal_data[(seasonal_data['player'].str.lower() == qb_name.lower())]
 
     if seasonal_qb.empty:
-        print(f"{qb_name} is not a valid player.")
+        print(f"{qb_name} is not a valid player.(seasonal)")
         return -1
 
     weekly_qb = weekly_data[(weekly_data['pfr_player_name'].str.lower() == qb_name.lower()) &
@@ -91,7 +91,7 @@ def get_qb_stats(qb_name, pbp_data):
     ]
 
     if weekly_qb.empty:
-        print(f"{qb_name} is not a valid player.")
+        print(f"{qb_name} is not a valid player.(weekly)")
         return -1
 
 
@@ -100,7 +100,7 @@ def get_qb_stats(qb_name, pbp_data):
     ]
     
     if pbp_qb.empty:
-        print(f"{qb_name} is not a valid player.")
+        print(f"{qb_name} is not a valid player.(pbp)")
         return -1
 
     ftn_qb = ftn_data.merge(
@@ -132,10 +132,6 @@ def get_qb_stats(qb_name, pbp_data):
         'yards_per_attempt': round(ngs_qb['pass_yards'].values[0]/ngs_qb['attempts'].values[0], 1)
 
     }
-
-    print(f"2024 Stats for {qb_name}")
-    for stat, value in stats.items():
-        print(f"{stat}: {value}")
     
     return stats
 
@@ -144,23 +140,16 @@ def generate_qb_score(stats):
 
 qb1, qb2, qb1_stats, qb2_stats = "", "", -1, -1 # Default values
 
-while True:
+while (qb1_stats == -1):
     qb1 = input("Enter the first Quarterback: ") 
     qb1_stats = get_qb_stats(qb1, pbp_data)
-    if(qb1_stats == -1):
-        qb1 = input("Enter the first Quarterback: ") 
-    else: 
-        break
 
-while True:
+while (qb2_stats == -1):
     qb2 = input("Enter the second Quarterback: ") 
     if (qb1.lower() == qb2.lower()):
         print("You entered the same quarterback twice!")
+        continue
     qb2_stats = get_qb_stats(qb2, pbp_data)
-    if(qb2_stats == -1):
-        qb1 = input("Enter the second Quarterback: ") 
-    else: 
-        break
 
 
 print(f"Generating {qb1}'s score...")
