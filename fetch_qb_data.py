@@ -3,13 +3,11 @@ import nfl_data_py as nfl
 
 ngs_data = nfl.import_ngs_data(stat_type='passing', years=[2024])
 weekly_data = nfl.import_weekly_pfr(years=[2024], s_type='pass')
+ftn_data = nfl.import_ftn_data(years=[2024])
+seasonal_data = nfl.import_seasonal_pfr(years=[2024], s_type='pass')
 
-for col in ngs_data.columns:
-    print(f"  - {col}")
+print(ngs_data.columns.tolist())
 
-if 'spike' in weekly_data.columns:
-    print("\nUnique pass values:")
-    print(weekly_data['pass'].unique())
 '''
 players = nfl.import_players()
 
