@@ -77,19 +77,22 @@ def get_qb_stats(qb_name, pbp_data):
     ]
 
     if ngs_qb.empty:
-        return f"{qb_name} is not a valid player."
+        print(f"{qb_name} is not a valid player.")
+        return -1
 
     seasonal_qb = seasonal_data[(seasonal_data['player'].str.lower() == qb_name.lower())]
 
     if seasonal_qb.empty:
-        return None
+        print(f"{qb_name} is not a valid player.")
+        return -1
 
     weekly_qb = weekly_data[(weekly_data['pfr_player_name'].str.lower() == qb_name.lower()) &
         (weekly_data['game_type'] == 'REG')
     ]
 
     if weekly_qb.empty:
-        return None
+        print(f"{qb_name} is not a valid player.")
+        return -1
 
 
     pbp_qb = pbp_data[(pbp_data['passer_player_name'] == format_name_pbp_passer(qb_name)) &
@@ -97,7 +100,8 @@ def get_qb_stats(qb_name, pbp_data):
     ]
     
     if pbp_qb.empty:
-        return None
+        print(f"{qb_name} is not a valid player.")
+        return -1
 
     ftn_qb = ftn_data.merge(
         pbp_qb[['nflverse_game_id', 'play_id']], 
@@ -135,5 +139,40 @@ def get_qb_stats(qb_name, pbp_data):
     
     return stats
 
-#qb1 = input("Enter the first Quarterback: ") 
-print(get_qb_stats("Lamar Jackson", pbp_data))
+def generate_qb_score(stats):
+    return 1;
+
+qb1, qb2, qb1_stats, qb2_stats = "", "", -1, -1 # Default values
+
+while True:
+    qb1 = input("Enter the first Quarterback: ") 
+    qb1_stats = get_qb_stats(qb1, pbp_data)
+    if(qb1_stats == -1):
+        qb1 = input("Enter the first Quarterback: ") 
+    else: 
+        break
+
+while True:
+    qb2 = input("Enter the second Quarterback: ") 
+    if (qb1.lower() == qb2.lower()):
+        print("You entered the same quarterback twice!")
+    qb2_stats = get_qb_stats(qb2, pbp_data)
+    if(qb2_stats == -1):
+        qb1 = input("Enter the second Quarterback: ") 
+    else: 
+        break
+
+
+print(f"Generating {qb1}'s score...")
+qb1_score = generate_qb_score(qb1)
+print(f"Generating {qb2}'s score...")
+qb2_score = generate_qb_score(qb2)
+
+if qb1_score > qb2_score:
+    print(f"{qb1} scores higher than {qb2} according to my algorithm!")
+elif qb2_score > qb1_score:
+    print(f"{qb2} scores higher than {qb1} according to my algorithm!")
+else:
+    print(f"WOW! They both got the same score of {qb2_score}")
+
+    
