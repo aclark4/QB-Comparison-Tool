@@ -4,9 +4,12 @@ import nfl_data_py as nfl
 ngs_data = nfl.import_ngs_data(stat_type='passing', years=[2024])
 weekly_data = nfl.import_weekly_pfr(years=[2024], s_type='pass')
 ftn_data = nfl.import_ftn_data(years=[2024])
-seasonal_data = nfl.import_seasonal_pfr(years=[2024], s_type='pass')
+seasonal_data_pfr = nfl.import_seasonal_pfr(years=[2024], s_type='pass')
+ngs_rushing_data = nfl.import_ngs_data(stat_type='rushing', years=[2024])
+seasonal_data = nfl.import_seasonal_data(years=[2024])
+player_ids = nfl.import_ids()
 
-print(ngs_data.columns.tolist())
+print(seasonal_data_pfr.columns.tolist())
 
 '''
 players = nfl.import_players()
