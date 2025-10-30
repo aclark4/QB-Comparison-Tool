@@ -123,16 +123,13 @@ def get_qb_stats(qb_name, pbp_data):
         print(f"{qb_name} is not a valid player.(weekly)")
         return -1
 
-
     pbp_qb = pbp_data[(pbp_data['passer_player_name'] == format_name_pbp_passer(qb_name)) &
         (pbp_data['season_type'] == 'REG')
     ]
-
     
     if pbp_qb.empty:
         print(f"{qb_name} is not a valid player.(pbp)")
         return -1
-
     
 
     ftn_qb = ftn_data.merge(
